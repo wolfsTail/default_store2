@@ -1,11 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+from goods.models import Categories
+
 
 def index(request):
     context = {}
+    categories = Categories.objects.all()
     context.update(
-        {"title": "Default Store - Главная", "content": "Default shop blank 2.0"}
+        {
+            "title": "Default Store - Главная",
+            "content": "Default shop blank 2.0",
+            "categories": categories,
+        }
     )
     return render(request, "main/index.html", context)
 

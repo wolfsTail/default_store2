@@ -6,3 +6,5 @@ media/
 __pycache__
 db.sqlite3
 .pylintrc
+static
+fixtires
