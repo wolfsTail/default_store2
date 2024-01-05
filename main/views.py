@@ -5,13 +5,11 @@ from goods.models import Categories
 
 
 def index(request):
-    context = {}
-    categories = Categories.objects.all()
+    context = {}    
     context.update(
         {
             "title": "Default Store - Главная",
-            "content": "Default shop blank 2.0",
-            "categories": categories,
+            "content": "Default shop blank 2.0",            
         }
     )
     return render(request, "main/index.html", context)
