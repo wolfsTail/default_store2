@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.posrgres',
+    'django.contrib.postgres',
     # third-party apps
     "debug_toolbar",
     # custom apps
