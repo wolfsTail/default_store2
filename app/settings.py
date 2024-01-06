@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     # custom apps
     'users.apps.UsersConfig',
     'main.apps.MainConfig',
-    'goods.apps.GoodsConfig',    
+    'goods.apps.GoodsConfig',
+    'carts.apps.CartsConfig',    
 
 ]
 
@@ -152,3 +153,5 @@ INTERNAL_IPS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+LOGIN_URL = '/users/login/'

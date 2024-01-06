@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm, UserLoginForm, UserRegistrationForm
 
 
+def users_cart(request):
+    return render(request, "users/users_cart.html")
+
 def login(request):
     context = {}    
 
@@ -19,6 +22,10 @@ def login(request):
             if user:
                 auth.login(request, user)
                 messages.success(request, 'Вы успешно аутентифицировались.')
+
+                if request.POST.get('next', None):
+                    return HttpResponseRedirect(request.POST['next'])
+
                 return HttpResponseRedirect(reverse('main:index'))
     else:
         form = UserLoginForm()
