@@ -1,0 +1,77 @@
+from django.contrib import auth, messages
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required 
+
+from .forms import ProfileForm, UserLoginForm, UserRegistrationForm
+
+
+def login(request):
+    context = {}    
+
+    if request.method == "POST":
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = auth.authenticate(username=username, password=password)
+            if user:
+                auth.login(request, user)
+                messages.success(request, 'Вы успешно аутентифицировались.')
+                return HttpResponseRedirect(reverse('main:index'))
+    else:
+        form = UserLoginForm()
+
+    context.update(
+        {
+        'title': 'Default Store - Аутентификация',
+        'form': form,
+         }
+        )
+    return render(request, "users/login.html", context)
+
+def registration(request):
+    context = {}
+
+    if request.method == "POST":
+        form = UserRegistrationForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.instance
+            auth.login(request, user)
+            messages.success(request, 'Вы успешно зарегистрировались.')            
+            return HttpResponseRedirect(reverse('main:index'))
+    else:
+        form = UserRegistrationForm()
+
+    context.update(
+        {'title': 'Default Store - Регистрация',
+         "form": form,}
+    )   
+    return render(request, "users/registration.html", context)
+
+@login_required
+def profile(request):
+    context = {}
+
+    if request.method == "POST":
+        form = ProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Информация в профиле успешно обновлена.')         
+            return HttpResponseRedirect(reverse('user:profile'))
+    else:
+        form = ProfileForm(instance=request.user)
+
+    context.update(
+        {'title': 'Default Store - Регистрация',
+         "form": form,}
+    )   
+    return render(request, "users/profile.html", context)
+
+@login_required
+def logout(request):
+    messages.success(request, 'Вы успешно вышли из аккаунта.')
+    auth.logout(request)
+    return redirect(reverse('main:index'))
