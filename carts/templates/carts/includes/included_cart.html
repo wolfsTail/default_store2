@@ -1,7 +1,5 @@
 {% load static %}
 
-
-
 <div class="card mb-3 text-bg-light shadow-lg">
     {% for cart in carts %}
         <div class="card-header">
@@ -14,29 +12,33 @@
                         <div class="input-group">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-dark btn-sm decrement"
-                                    data-cart-id="" data-cart-change-url="">-</button>
+                                    data-cart-id="{{ cart.id }}" data-cart-change-url="{% url "cart:cart_update" %}">
+                                    {% csrf_token %}-</button>
                             </span>
                             <input type="text" class="form-control number" value="{{ cart.quantity }}"
                                 readonly>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-dark btn-sm increment"
-                                    data-cart-id="" data-cart-change-url="">+</button>
+                                    data-cart-id="{{ cart.id }}" data-cart-change-url="{% url "cart:cart_update" %}">
+                                    {% csrf_token %}+</button>
                             </span>
                         </div>
                     </div>
                     <div class="col p-0">
-                        <p>x {{ cart.product.get_sell_price }} = </p>
+                        <p>x {{ cart.product.sell_price }} = </p>
                     </div>
-                    <div class="col p-0"><strong>{{ cart.products_price }} $</strong></div>
+                    <div class="col p-0"><strong> {{cart.products_price}} $</strong></div>
                     <div class="col p-0">
-                        <a href=" {% url "cart:cart_remove" 1 %} " class="remove-from-cart" data-cart-id="">
+                        <a href="{% url "cart:cart_remove" %}" class="remove-from-cart"
+                        data-cart-id="{{ cart.id }}">
+                            {% csrf_token %}
                             <img class="mx-1" src="{% static "deps/icons/trash3-fill.svg" %}"
                                 alt="Catalog Icon" width="16" height="16">
                         </a>
                     </div>
                 </div>
             </li>
-        </ul>    
+        </ul>
     {% endfor %}
 </div>
 <div class="card mb-3 shadow-lg">
