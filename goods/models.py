@@ -1,5 +1,6 @@
 from enum import unique
 from django.db import models
+from django.urls import reverse
 
 
 class Categories(models.Model):
@@ -51,7 +52,10 @@ class Products(models.Model):
         db_table = "product"
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
-        ordering = "id", 
+        ordering = "id",
+
+    def get_absolute_url(self):
+        return reverse("goods:product", kwargs={"product_slug": self.slug})     
     
     def displied_id(self):
         return f"{self.id:05}"
@@ -62,4 +66,4 @@ class Products(models.Model):
         return self.price
     
     def __str__(self):
-        return f"{self.name}, кол-во - {self.quantity}"
+        return f"{self.name}, остаток: {self.quantity}"
