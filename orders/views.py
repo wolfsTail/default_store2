@@ -2,12 +2,13 @@ from django.contrib import messages
 from django.db import transaction
 from django.forms import ValidationError
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 
 from carts.models import Cart
 from orders.models import Order, OrderItem
 from .forms import CreateOrderForm
 
-
+@login_required
 def create_order(request):
     context = {}
 
@@ -48,10 +49,10 @@ def create_order(request):
                         cart_items.delete()
 
                         messages.success(request, "Заказ успешно оформлен, корзина обновлена!")
-                        return redirect("user.profile")
+                        return redirect("user:profile")
             except ValidationError as err:
                 messages.info(request, str(err))                
-                return redirect("user.profile")   
+                return redirect("user:profile")   
     else:
         initial = {
             "first_name": request.user.first_name,

@@ -1,3 +1,4 @@
+import re
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
@@ -29,6 +30,14 @@ class UserRegistrationForm(UserCreationForm):
             "password1", 
             "password2",
         )
+    def clear_email(self):
+        email = self.cleaned_data["email"]
+        pattern = re.compile(r'^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$;')
+        if not pattern.match(email):
+            raise forms.ValidationError("Введены некорректный формат email адреса")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Введены некорректные регистрационные данные")
+        return email
 
 
 class ProfileForm(UserChangeForm):
