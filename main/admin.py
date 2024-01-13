@@ -1,3 +1,8 @@
 from django.contrib import admin
+from main.models import IndexPageContent, AboutPageContent, PayAndDeliveryPageContent, InformationPageContent
 
-# Register your models here.
+
+admin.site.register(IndexPageContent)
+admin.site.register(AboutPageContent)
+admin.site.register(PayAndDeliveryPageContent)
+admin.site.register(InformationPageContent)

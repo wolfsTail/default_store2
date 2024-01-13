@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     # third-party apps
     "debug_toolbar",
+    # "django_celery_beat",
+    # "django_celery_results",
     # custom apps
     'users.apps.UsersConfig',
     'main.apps.MainConfig',
@@ -156,3 +158,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 LOGIN_URL = '/users/login/'
+
+# Celery settings
+# CELERY_BROKER_URL = "redis://localhost:6379"
+# CELERY_RESULT_BACKEND = "redis://localhost:6379"
+# CELERY_RESULT_EXTENDED = True
+# CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+# CELERY_BEAT_SCHEDULE = 'django_celery_beat.schedulers.DatabaseScheduler'
