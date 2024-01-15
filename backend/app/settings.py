@@ -11,11 +11,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 from django.conf.global_settings import AUTH_USER_MODEL
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -23,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-tn6#9-l1tkly%-sdd*$j-#r35y0tuhz=n88vx$35ya82)$0)j6'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv('DEBUG'))
 
 ALLOWED_HOSTS = ['*']
 
@@ -43,8 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     # third-party apps
     "debug_toolbar",
-    # "django_celery_beat",
-    # "django_celery_results",
     # custom apps
     'users.apps.UsersConfig',
     'main.apps.MainConfig',
@@ -65,6 +66,9 @@ MIDDLEWARE = [
     # third-party middleware
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+if DEBUG is False:
+    del MIDDLEWARE[-1]
 
 ROOT_URLCONF = 'app.urls'
 
@@ -91,13 +95,13 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'default_store_db',
-        'USER': 'super_user',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": str(os.getenv("SQL_ENGINE")),
+        "NAME": str(os.getenv("SQL_DATABASE")),
+        "USER": str(os.getenv("SQL_USER")),
+        "PASSWORD": str(os.getenv("SQL_PASSWORD")),
+        "HOST": str(os.getenv("SQL_HOST")),
+        "PORT": str(os.getenv("SQL_PORT")),
     }
 }
 
@@ -159,9 +163,3 @@ AUTH_USER_MODEL = 'users.User'
 
 LOGIN_URL = '/users/login/'
 
-# Celery settings
-# CELERY_BROKER_URL = "redis://localhost:6379"
-# CELERY_RESULT_BACKEND = "redis://localhost:6379"
-# CELERY_RESULT_EXTENDED = True
-# CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-# CELERY_BEAT_SCHEDULE = 'django_celery_beat.schedulers.DatabaseScheduler'
